@@ -1,0 +1,27 @@
+{
+  "name": "front-line",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "fight": "node src/cli/fight.js"
+  },
+  "dependencies": {
+    "js-combinatorics": "^2.1.1",
+    "pinia": "^2.0.32",
+    "ramda": "^0.29.0",
+    "random-js": "^2.1.0",
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "eslint": "^8.34.0",
+    "eslint-plugin-vue": "^9.9.0",
+    "vite": "^4.1.4"
+  }
+}
