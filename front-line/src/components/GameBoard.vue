@@ -9,14 +9,14 @@ const store = useGameStateStore()
 
 watch(
   () => [store.gameState?.turn, store.player],
-  ([turn, player]) => {
+  async ([turn, player]) => {
     if (store.gameState.winner != null || turn === player) {
       document.body.style.cursor = 'auto'
     } else {
       document.body.style.cursor = 'wait'
 
       const action =
-        (() => {
+        await (() => {
           const self = turn
           const other = (self + 1) % 2
 

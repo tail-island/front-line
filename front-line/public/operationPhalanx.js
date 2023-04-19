@@ -161,5 +161,10 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   return legalActions[Math.floor(Math.random() * legalActions.length)]
 }
 
+// ゲームを終了します。ゲームのエンジンから呼ばれます。
+export function finish () {
+  console.error('ゲーム終了')
+}
+
 // とりあえず、名前を表示しておきます。
 console.error('*** ファランクス作戦 ***')

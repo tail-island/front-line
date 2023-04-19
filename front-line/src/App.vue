@@ -19,6 +19,7 @@ const newGameState = () => {
     <option value="operationPhalanx">ファランクス作戦</option>
     <option value="operationRandom">ランダム作戦</option>
     <option value="operationFirstLegalAction">最初の合法手作戦</option>
+    <option value="useWebSocket">WebSocket</option>
   </select>
   &nbsp;&nbsp;
 

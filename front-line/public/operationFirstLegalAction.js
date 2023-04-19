@@ -22,5 +22,10 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   return legalActions[0]
 }
 
+// ゲームを終了します。ゲームのエンジンから呼ばれます。
+export function finish () {
+  console.error('ゲーム終了')
+}
+
 // とりあえず、名前を表示しておきます。
 console.error('*** 最初の合法手作戦 ***')

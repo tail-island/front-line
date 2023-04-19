@@ -8,14 +8,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "fight": "node src/cli/fight.js"
+    "fight": "node src/cli/fight.js",
+    "webSocket": "node src/cli/webSocketAdapter.js"
   },
   "dependencies": {
     "js-combinatorics": "^2.1.1",
     "pinia": "^2.0.32",
     "ramda": "^0.29.0",
     "random-js": "^2.1.0",
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",

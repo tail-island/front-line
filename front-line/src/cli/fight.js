@@ -44,6 +44,7 @@ function getAction () {
 
 function endPlayers () {
   for (const player of players) {
+    player.stdin.write(`${JSON.stringify({ command: 'finish' })}\n`)
     player.stdin.end()
   }
 }
@@ -74,7 +75,7 @@ for (const [i, player] of players.entries()) {
   createInterface(player.stdout).on('line', doAction)
 
   const stream = createWriteStream(`player-${i}.log`)
-  createInterface(player.stderr).on('line', line => { stream.write(`${line}\n`) }) // TODO: ファイルに保存する方式に変更する
+  createInterface(player.stderr).on('line', line => { stream.write(`${line}\n`) })
 }
 
 getAction()
