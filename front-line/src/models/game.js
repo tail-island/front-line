@@ -25,7 +25,7 @@ export class Game {
       )
 
     return {
-      flags: repeat({}, 9),
+      flags: repeat({ owner: null }, 9),
       layouts: repeat(repeat([], 9), 2),
       hands,
       stock,
