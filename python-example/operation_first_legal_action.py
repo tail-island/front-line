@@ -14,7 +14,7 @@ def get_action(layout, other_layout, flags, hand, other_hand_length, stock_lengt
     def get_legal_actions():
         for i, _ in enumerate(hand):
             for j, (flag, layout_line) in enumerate(zip(flags, layout)):
-                if flag['owner'] is None and len(layout_line) < 3: # flag['owner']が0の場合、Pythonだと偽になってしまうので注意！
+                if flag['owner'] is None and len(layout_line) < 3:  # flag['owner']が0の場合、Pythonだと偽になってしまうので注意！
                     yield {'from': i, 'to': j}
 
     # 最初の合法手を選択します。
