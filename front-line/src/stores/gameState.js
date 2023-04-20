@@ -1,10 +1,21 @@
 import { defineStore } from 'pinia'
 import { ref, watch } from 'vue'
 import { Game } from '@/models/game'
+import * as operationFirstLegalAction from '@/players/operationFirstLegalAction'
+import * as operationPhalanx from '@/players/operationPhalanx'
+import * as operationRandom from '@/players/operationRandom'
+import * as useWebSocket from '@/players/useWebSocket'
+
+const players = {
+  operationFirstLegalAction,
+  operationPhalanx,
+  operationRandom,
+  useWebSocket
+}
 
 export const useGameStateStore = defineStore(
   'gameState',
-  (seed = null) => {
+  () => {
     const game = new Game()
     const gameState = ref(null)
     const player = ref(0)
@@ -20,7 +31,7 @@ export const useGameStateStore = defineStore(
     )
 
     const newGameState = async (enemyName, seed, playerValue) => {
-      enemyModule.value = await import(`/${enemyName}.js`)
+      enemyModule.value = players[enemyName]
       await enemyModule.value.initialize()
 
       gameState.value = game.getNewState(seed)

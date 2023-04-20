@@ -1,4 +1,4 @@
-const webSocket = new WebSocket('ws://localhost:8000')
+let webSocket = null
 
 async function communicate (message) {
   await new Promise(resolve => {
@@ -22,12 +22,16 @@ async function communicate (message) {
   })
 }
 
-export function initialize () {
-  communicate({ command: 'initialize' })
+export async function initialize () {
+  if (!webSocket) {
+    webSocket = new WebSocket('ws://localhost:8000')
+  }
+
+  await communicate({ command: 'initialize' })
 }
 
-export function getAction (layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst) {
-  return communicate(
+export async function getAction (layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst) {
+  return await communicate(
     {
       command: 'getAction',
       state: { layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst }
@@ -35,6 +39,6 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   )
 }
 
-export function terminate () {
-  communicate({ command: 'terminate' })
+export async function terminate () {
+  await communicate({ command: 'terminate' })
 }

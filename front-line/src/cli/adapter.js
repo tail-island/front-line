@@ -1,6 +1,6 @@
 import { createInterface } from 'readline'
 
-import(`../../public/${process.argv[2]}.js`).then(({ initialize, getAction, terminate }) => {
+import(`../players/${process.argv[2]}.js`).then(({ initialize, getAction, terminate }) => {
   createInterface({ input: process.stdin }).on('line', line => {
     const message = JSON.parse(line)
 

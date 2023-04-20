@@ -31,7 +31,7 @@ watch(
         })()
 
       if (!store.isLegalAction(action)) {
-        console.log('action is illegal...')
+        console.log(`action (${action}) is illegal...`)
         return
       }
 
