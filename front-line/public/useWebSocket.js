@@ -23,7 +23,7 @@ async function communicate (message) {
 }
 
 export function initialize () {
-  return communicate({ command: 'initialize' })
+  communicate({ command: 'initialize' })
 }
 
 export function getAction (layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst) {
@@ -36,5 +36,5 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
 }
 
 export function terminate () {
-  return communicate({ command: 'terminate' })
+  communicate({ command: 'terminate' })
 }
