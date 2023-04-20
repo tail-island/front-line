@@ -14,19 +14,19 @@ while True:
     match message['command']:
         case 'initialize':
             initialize()
-            print('OK')
+            print(json.dumps('OK'))
 
         case 'getAction':
-            action = json.dumps(get_action(message['state']['layout'],
-                                           message['state']['otherLayout'],
-                                           message['state']['flags'],
-                                           message['state']['hand'],
-                                           message['state']['otherHandLength'],
-                                           message['state']['stockLength'],
-                                           message['state']['playFirst']))
-            print(action)
+            action = get_action(message['state']['layout'],
+                                message['state']['otherLayout'],
+                                message['state']['flags'],
+                                message['state']['hand'],
+                                message['state']['otherHandLength'],
+                                message['state']['stockLength'],
+                                message['state']['playFirst'])
+            print(json.dumps(action))
 
         case 'terminate':
             terminate()
-            print('OK')
+            print(json.dumps('OK'))
             break

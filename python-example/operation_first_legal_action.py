@@ -8,6 +8,8 @@ def initialize():
 
 # 手を取得します。
 def get_action(layout, other_layout, flags, hand, other_hand_length, stock_length, play_first):
+    print('最初の合法手を選択します', file=sys.stderr)  # 標準出力は通信で使用するので、標準エラー出力にログを出力します。
+
     # 合法手の集合を取得します。
     def get_legal_actions():
         for i, _ in enumerate(hand):

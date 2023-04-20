@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { Game } from '@/models/game'
 
 export const useGameStateStore = defineStore(
@@ -10,8 +10,19 @@ export const useGameStateStore = defineStore(
     const player = ref(0)
     const enemyModule = ref(null)
 
+    watch(
+      () => gameState.value?.winner,
+      winner => {
+        if (winner != null) {
+          enemyModule.value.terminate()
+        }
+      }
+    )
+
     const newGameState = async (enemyName, seed, playerValue) => {
       enemyModule.value = await import(`/${enemyName}.js`)
+      enemyModule.value.initialize()
+
       gameState.value = game.getNewState(seed)
       player.value = playerValue
     }

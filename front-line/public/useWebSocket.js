@@ -1,6 +1,14 @@
 const webSocket = new WebSocket('ws://localhost:8000')
 
-function communicate (message) {
+async function communicate (message) {
+  await new Promise(resolve => {
+    setTimeout(() => {
+      if (webSocket.readyState) {
+        resolve()
+      }
+    }, 100)
+  })
+
   return new Promise(resolve => {
     webSocket.addEventListener(
       'message',
