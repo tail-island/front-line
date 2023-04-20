@@ -15,6 +15,7 @@ def get_action(layout, other_layout, flags, hand, other_hand_length, stock_lengt
                 if ('owner' not in flag or flag['owner'] == None) and len(layout[j]) < 3:
                     yield {'from': i, 'to': j}
 
+    # 最初の合法手を選択します。
     return tuple(get_legal_actions())[0]
 
 
