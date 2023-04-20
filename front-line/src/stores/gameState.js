@@ -12,16 +12,16 @@ export const useGameStateStore = defineStore(
 
     watch(
       () => gameState.value?.winner,
-      winner => {
+      async winner => {
         if (winner != null) {
-          enemyModule.value.terminate()
+          await enemyModule.value.terminate()
         }
       }
     )
 
     const newGameState = async (enemyName, seed, playerValue) => {
       enemyModule.value = await import(`/${enemyName}.js`)
-      enemyModule.value.initialize()
+      await enemyModule.value.initialize()
 
       gameState.value = game.getNewState(seed)
       player.value = playerValue
