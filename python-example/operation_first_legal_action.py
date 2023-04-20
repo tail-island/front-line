@@ -13,8 +13,8 @@ def get_action(layout, other_layout, flags, hand, other_hand_length, stock_lengt
     # 合法手の集合を取得します。
     def get_legal_actions():
         for i, _ in enumerate(hand):
-            for j, flag in enumerate(flags):
-                if flag['owner'] is None and len(layout[j]) < 3: # flag['owner']が0の場合、Pythonだと偽になってしまうので注意！
+            for j, (flag, layout_line) in enumerate(zip(flags, layout)):
+                if flag['owner'] is None and len(layout_line) < 3: # flag['owner']が0の場合、Pythonだと偽になってしまうので注意！
                     yield {'from': i, 'to': j}
 
     # 最初の合法手を選択します。
