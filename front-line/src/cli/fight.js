@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { createWriteStream } from 'fs'
+// import { createWriteStream } from 'fs'
 import { createInterface } from 'readline'
 import { Game } from '../models/game.js'
 
@@ -20,62 +20,88 @@ function printState (state) {
   console.log('-------------------------------------------------------------------')
 }
 
-const players = process.argv.slice(2, 4).map(command => spawn(command.split(' ')[0], command.split(' ').slice(1)))
+function initialize (player) {
+  return new Promise(resolve => {
+    player.stdout.once('line', line => {
+      resolve()
+    })
+
+    player.stdin.write(`${JSON.stringify({ command: 'initialize' })}\n`)
+  })
+}
+
+function getAction (player, state) {
+  return new Promise(resolve => {
+    player.stdout.once('line', line => {
+      resolve(JSON.parse(line))
+    })
+
+    player.stdin.write(`${JSON.stringify({ command: 'getAction', state })}\n`)
+  })
+}
+
+function terminate (player) {
+  return new Promise(resolve => {
+    player.stdout.once('line', line => {
+      resolve()
+    })
+
+    player.stdin.write(`${JSON.stringify({ command: 'terminate' })}\n`)
+  })
+}
+
+const players = process.argv.slice(2, 4).map((command, i) => {
+  const result = spawn(command.split(' ')[0], command.split(' ').slice(1))
+
+  result.stdout = createInterface(result.stdout)
+
+  // const stream = createWriteStream(`player-${i}.log`)
+  // createInterface(result.stderr).on('line', line => { stream.write(`${line}\n`) })
+  createInterface(result.stderr).on('line', console.error)
+
+  return result
+})
+
 const seed = process.argv[4] != null ? parseInt(process.argv[4]) : 0
 const game = new Game()
 
 let state = game.getNewState(seed)
 printState(state)
 
-function getAction () {
+for (const player of players) {
+  await initialize(player)
+}
+
+while (state.winner == null) {
   const self = state.turn
   const other = (self + 1) % 2
 
-  players[self].stdin.write(`${JSON.stringify({
-    layout: state.layouts[self],
-    otherLayout: state.layouts[other],
-    flags: state.flags,
-    hand: state.hands[self],
-    otherHandLength: state.hands[other].length,
-    stockLength: state.stock.length,
-    playFirst: self === 0
-  })}\n`)
-}
-
-function endPlayers () {
-  for (const player of players) {
-    player.stdin.write(`${JSON.stringify({ command: 'finish' })}\n`)
-    player.stdin.end()
-  }
-}
-
-function doAction (json) {
-  const action = JSON.parse(json)
+  const action = await getAction(
+    players[self],
+    {
+      layout: state.layouts[self],
+      otherLayout: state.layouts[other],
+      flags: state.flags,
+      hand: state.hands[self],
+      otherHandLength: state.hands[other].length,
+      stockLength: state.stock.length,
+      playFirst: self === 0
+    }
+  )
 
   if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
     console.log('illegal action...')
-    console.log(`Player ${(state.turn + 1) % 2} win!`)
-    endPlayers()
-    return
+    state.winner = other
+    break
   }
 
   state = game.getNextState(state, action)
   printState(state)
-
-  if (state.winner != null) {
-    console.log(`Player ${state.winner} win!`)
-    endPlayers()
-    return
-  }
-
-  getAction()
 }
 
-for (const [i, player] of players.entries()) {
-  createInterface(player.stdout).on('line', doAction)
+console.log(`Player ${state.winner} win!`)
 
-  const stream = createWriteStream(`player-${i}.log`)
-  createInterface(player.stderr).on('line', line => { stream.write(`${line}\n`) })
+for (const player of players) {
+  await terminate(player)
+  player.stdin.end()
 }
-
-getAction()

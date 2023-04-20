@@ -1,3 +1,8 @@
+// 初期化します。ゲームのエンジンから呼ばれます。
+export function initialize () {
+  console.error('*** ランダム作戦 ***', '初期化') // 標準出力は通信で使用するので、標準エラー出力にログを出力します。
+}
+
 // 合法手の集合を取得します。
 function * getLegalActions (layout, hand, flags) {
   // 手札の枚数だけループします。
@@ -22,10 +27,7 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   return legalActions[Math.floor(Math.random() * legalActions.length)]
 }
 
-// ゲームを終了します。ゲームのエンジンから呼ばれます。
-export function finish () {
-  console.error('ゲーム終了')
+// 終了します。ゲームのエンジンから呼ばれます。
+export function terminate () {
+  console.error('*** ランダム作戦 ***', '終了')
 }
-
-// とりあえず、名前を表示しておきます。
-console.error('*** ランダム作戦 ***')

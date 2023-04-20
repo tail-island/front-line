@@ -1,3 +1,8 @@
+// 初期化します。ゲームのエンジンから呼ばれます。
+export function initialize () {
+  console.error('*** ファランクス作戦 ***', '初期化') // 標準出力は通信で使用するので、標準エラー出力にログを出力します。
+}
+
 // 合法手の集合を取得します。
 function * getLegalActions (layout, hand, flags) {
   // 手札の枚数だけループします。
@@ -18,13 +23,13 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   // 合法手かどうかを判断するラムダ式です。
   const isLegal = (from, to) => from < hand.length && layout[to].length < 3 && flags[to].owner == null
 
-  // fromを取得するラムダ式です。
+  // カードの数字からfromを取得するラムダ式です。
   const getFrom = number => hand.map(card => card.number).indexOf(number)
 
-  // toを取得するラムダ式です。
+  // カードの数字からtoを取得するラムダ式です。
   const getTo = number => layout.map(line => line.length === 0 ? 0 : line[0].number).indexOf(number)
 
-  // 手札に、番号枚に何枚のカードがあるのかを調べます。
+  // 手札に、数字枚に何枚のカードがあるのかを調べます。
   const handNumberSizes = hand.reduce(
     (acc, card) => {
       acc[card.number - 1]++
@@ -34,7 +39,7 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   )
   console.error('手札', handNumberSizes)
 
-  // ファランクスを構成できる（数字が揃っている）場のカードの、番号枚に何枚のカードがあるのかを調べます。
+  // ファランクスを構成できる（数字が揃っている）場のカードの、数字枚に何枚のカードがあるのかを調べます。
   const layoutNumberSizes = layout.reduce(
     (acc, line) => {
       if (line.length === 0) { // 空のラインは無視します。
@@ -52,7 +57,7 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   )
   console.error('場札', layoutNumberSizes)
 
-  // 自分の場札が空の場合で、相手の場札が空ではない場合は、相手の場札の最初のカードより大きいカードを置きます。
+  // 自分の場札が空の場合で、相手の場札が空ではない場合は、相手の場札の最初のカードより数字が大きいカードを置きます。
   for (let to = 0; to < 9; ++to) {
     if (layout[to].length > 0 || otherLayout[to].length === 0 || flags[to].owner != null) {
       continue
@@ -61,7 +66,7 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
     for (let i = otherLayout[to][0].number + 1; i <= 10; ++i) {
       console.error('相手よりも大きな数を出す', `${i}がファランクスを揃えようとしている数字か調査`)
 
-      if (layoutNumberSizes[i - 1] > 0) { // ファランクスを揃えようとしている数は無視します。
+      if (layoutNumberSizes[i - 1] > 0) { // ファランクスを揃えようとしている数字は無視します。
         continue
       }
 
@@ -161,10 +166,7 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
   return legalActions[Math.floor(Math.random() * legalActions.length)]
 }
 
-// ゲームを終了します。ゲームのエンジンから呼ばれます。
-export function finish () {
-  console.error('ゲーム終了')
+// 終了します。ゲームのエンジンから呼ばれます。
+export function terminate () {
+  console.error('*** ファランクス作戦 ***', '終了')
 }
-
-// とりあえず、名前を表示しておきます。
-console.error('*** ファランクス作戦 ***')

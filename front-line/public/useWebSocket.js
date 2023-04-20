@@ -1,8 +1,6 @@
 const webSocket = new WebSocket('ws://localhost:8000')
 
-export function getAction (layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst) {
-  webSocket.send(JSON.stringify({ layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst }))
-
+function communicate (message) {
   return new Promise(resolve => {
     webSocket.addEventListener(
       'message',
@@ -11,9 +9,24 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
       },
       { once: true }
     )
+
+    webSocket.send(JSON.stringify(message))
   })
 }
 
-export function finish () {
-  webSocket.send(JSON.stringify({ command: 'finish' }))
+export function initialize () {
+  return communicate({ command: 'initialize' })
+}
+
+export function getAction (layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst) {
+  return communicate(
+    {
+      command: 'getAction',
+      state: { layout, otherLayout, flags, hand, otherHandLength, stockLength, playFirst }
+    }
+  )
+}
+
+export function terminate () {
+  return communicate({ command: 'terminate' })
 }
