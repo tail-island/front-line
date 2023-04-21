@@ -22,5 +22,5 @@ def get_action(layout, other_layout, flags, hand, other_hand_length, stock_lengt
 
 
 # 終了します。
-def terminate():
+def finalize():
     print('*** 最初の合法手作戦(Python) ***', '終了', file=sys.stderr)

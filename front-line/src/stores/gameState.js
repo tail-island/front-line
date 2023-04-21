@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { Game } from '@/models/game'
 import * as operationFirstLegalAction from '@/players/operationFirstLegalAction'
 import * as operationPhalanx from '@/players/operationPhalanx'
@@ -21,15 +21,6 @@ export const useGameStateStore = defineStore(
     const player = ref(0)
     const enemyModule = ref(null)
 
-    watch(
-      () => gameState.value?.winner,
-      async winner => {
-        if (winner != null) {
-          await enemyModule.value.terminate()
-        }
-      }
-    )
-
     const newGameState = async (enemyName, seed, playerValue) => {
       enemyModule.value = players[enemyName]
       await enemyModule.value.initialize()
@@ -44,6 +35,10 @@ export const useGameStateStore = defineStore(
       gameState.value = game.getNextState(gameState.value, action)
     }
 
-    return { gameState, player, enemyModule, newGameState, isLegalAction, nextGameState }
+    const finalizeGame = async () => {
+      await enemyModule.value.finalize()
+    }
+
+    return { gameState, player, enemyModule, newGameState, isLegalAction, nextGameState, finalizeGame }
   }
 )

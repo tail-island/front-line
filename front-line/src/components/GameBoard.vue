@@ -40,6 +40,15 @@ watch(
   }
 )
 
+watch(
+  () => store.gameState?.winner,
+  (winner) => {
+    if (winner != null) {
+      store.finalizeGame()
+    }
+  }
+)
+
 const onAction = (action) => {
   if (store.gameState.winner != null || store.gameState.turn !== store.player) {
     return

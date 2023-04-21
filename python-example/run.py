@@ -2,7 +2,7 @@ import json
 import sys
 
 from io import TextIOWrapper
-from operation_first_legal_action import initialize, get_action, terminate
+from operation_first_legal_action import initialize, get_action, finalize
 
 # node.jsからの起動で文字化けしたので、対策をします。
 sys.stdout = TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -27,8 +27,8 @@ while True:
                                     message['state']['playFirst'])
                 print(json.dumps(action))
 
-            case 'terminate':
-                terminate()
+            case 'finalize':
+                finalize()
                 print(json.dumps('OK'))
 
     except EOFError:

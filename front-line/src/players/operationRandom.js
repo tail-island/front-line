@@ -28,6 +28,6 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
 }
 
 // 終了します。ゲームのエンジンから呼ばれます。
-export function terminate () {
+export function finalize () {
   console.error('*** ランダム作戦 ***', '終了')
 }

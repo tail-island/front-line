@@ -28,6 +28,6 @@ export function getAction (layout, otherLayout, flags, hand, otherHandLength, st
 }
 
 // 終了します。ゲームのエンジンから呼ばれます。
-export function terminate () {
+export function finalize () {
   console.error('*** 最初の合法手作戦 ***', '終了')
 }

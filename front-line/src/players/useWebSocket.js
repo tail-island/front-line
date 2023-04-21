@@ -39,6 +39,6 @@ export async function getAction (layout, otherLayout, flags, hand, otherHandLeng
   )
 }
 
-export async function terminate () {
-  await communicate({ command: 'terminate' })
+export async function finalize () {
+  await communicate({ command: 'finalize' })
 }
