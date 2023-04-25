@@ -4,20 +4,20 @@ import { createInterface } from 'readline'
 import { Game } from '../models/game.js'
 
 function printState (state) {
-  console.log('-------------------------------------------------------------------')
-  console.log(state.hands[0].map(card => `${card.color}-${card.number}`).join('\t'))
-  console.log()
+  console.error('-------------------------------------------------------------------')
+  console.error(state.hands[0].map(card => `${card.color}-${card.number}`).join('\t'))
+  console.error()
   for (let i = 2; i >= 0; --i) {
-    console.log(state.layouts[0].map(cards => cards.length > i ? `${cards[i].color}-${cards[i].number}` : '').join('\t'))
+    console.error(state.layouts[0].map(cards => cards.length > i ? `${cards[i].color}-${cards[i].number}` : '').join('\t'))
   }
-  console.log(state.flags.map(flag => flag.owner === 0 ? ' *' : '').join('\t'))
-  console.log(state.flags.map(flag => flag.owner === 1 ? ' *' : '').join('\t'))
+  console.error(state.flags.map(flag => flag.owner === 0 ? ' *' : '').join('\t'))
+  console.error(state.flags.map(flag => flag.owner === 1 ? ' *' : '').join('\t'))
   for (let i = 0; i < 3; ++i) {
-    console.log(state.layouts[1].map(cards => cards.length > i ? `${cards[i].color}-${cards[i].number}` : '').join('\t'))
+    console.error(state.layouts[1].map(cards => cards.length > i ? `${cards[i].color}-${cards[i].number}` : '').join('\t'))
   }
-  console.log()
-  console.log(state.hands[1].map(card => `${card.color}-${card.number}`).join('\t'))
-  console.log('-------------------------------------------------------------------')
+  console.error()
+  console.error(state.hands[1].map(card => `${card.color}-${card.number}`).join('\t'))
+  console.error('-------------------------------------------------------------------')
 }
 
 function initialize (player) {
@@ -90,7 +90,7 @@ while (state.winner == null) {
   )
 
   if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
-    console.log('illegal action...')
+    console.error('illegal action...')
     state.winner = other
     break
   }
@@ -99,7 +99,8 @@ while (state.winner == null) {
   printState(state)
 }
 
-console.log(`Player ${state.winner} win!`)
+console.error(`Player ${state.winner} win!`)
+console.log(state.winner)
 
 for (const player of players) {
   await terminate(player)

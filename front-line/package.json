@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "fight": "node src/cli/fight.js",
+    "play": "node src/cli/play.js",
     "webSocket": "node src/cli/webSocketAdapter.js"
   },
   "dependencies": {
