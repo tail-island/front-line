@@ -1,6 +1,6 @@
 import { createInterface } from 'readline'
 
-import(`../players/${process.argv[2]}.js`).then(({ initialize, getAction, terminate }) => {
+import(`../players/${process.argv[2]}.js`).then(({ initialize, getAction, finalize }) => {
   createInterface({ input: process.stdin }).on('line', line => {
     const message = JSON.parse(line)
 
@@ -17,8 +17,8 @@ import(`../players/${process.argv[2]}.js`).then(({ initialize, getAction, termin
         break
       }
 
-      case 'terminate': {
-        terminate()
+      case 'finalize': {
+        finalize()
         console.log(JSON.stringify('OK'))
         break
       }

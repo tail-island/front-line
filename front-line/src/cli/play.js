@@ -40,13 +40,13 @@ function getAction (player, state) {
   })
 }
 
-function terminate (player) {
+function finalize (player) {
   return new Promise(resolve => {
     player.stdout.once('line', line => {
       resolve()
     })
 
-    player.stdin.write(`${JSON.stringify({ command: 'terminate' })}\n`)
+    player.stdin.write(`${JSON.stringify({ command: 'finalize' })}\n`)
   })
 }
 
@@ -103,6 +103,6 @@ console.error(`Player ${state.winner} win!`)
 console.log(state.winner)
 
 for (const player of players) {
-  await terminate(player)
+  await finalize(player)
   player.stdin.end()
 }
