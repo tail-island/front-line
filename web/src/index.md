@@ -4,7 +4,7 @@
 
 ![バトルライン](./images/battle-line.jpg)
 
-* [課題とコンクールの進め方](./rule.html) - 本コンクールの詳細です
+* [課題とコンクールの進め方](./rule.html) - 本課題の詳細です
 * [課題確認](./front-line/dist/index.html) - 課題を実際にプレイして確認できます
 * [課題確認（ソース・コード）](./front-line.zip) - 課題説明のソース・コードです。AI同士を対戦させたり、皆様のAIと対戦してみる場合にご使用ください
 * [サンプル](./python-example.zip) - Pythonで作成したサンプルです
