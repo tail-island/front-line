@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>戦線 - 課題とコンクールの進め方</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.1.0/github-markdown.min.css" />
+  <meta name="description" content="文系の文系による文系のための機械学習ガイド。">
+  <meta name="keywords"    content="機械学習,Python">
+
+  <style>
+  	.markdown-body {
+  		box-sizing: border-box;
+  		min-width: 200px;
+  		max-width: 980px;
+  		margin: 0 auto;
+  		padding: 45px;
+  	}
+
+  	@media (max-width: 767px) {
+  		.markdown-body {
+  			padding: 15px;
+  		}
+  	}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<article class="markdown-body">
+<h1 id="課題とコンクールの進め方">課題とコンクールの進め方</h1>
+<p><a
+href="https://gekkansunday.net/work/395/">放課後さいころ倶楽部</a>の<a
+href="https://shogakukan-comic.jp/book?isbn=9784091247681">3巻</a>で紹介されたボードゲームに似たルールのゲームをプレイするAIを作成してください。このゲームを対人でプレイしたい場合は、<a
+href="https://www.amazon.co.jp/%E3%82%AF%E3%83%AD%E3%83%8E%E3%83%8E%E3%83%BC%E3%83%84%E3%82%B2%E3%83%BC%E3%83%A0-%E3%83%90%E3%83%88%E3%83%AB%E3%83%A9%E3%82%A4%E3%83%B3-%E6%97%A5%E6%9C%AC%E8%AA%9E%E7%89%88-2023/dp/B0C1VGBZG7/ref=sr_1_1">バトルライン</a>を購入してみてください。</p>
+<p><img src="./images/battle-line.jpg" alt="バトルライン" /></p>
+<h2 id="ルール">ルール</h2>
+<p>このゲームは2人で対戦します。互いの中央には、9つのフラッグが並んでいます。このゲームでは、色が6色、数字が1〜10の60枚のカードを使用します。</p>
+<p><img src="./images/9-flags.jpg" alt="フラッグ" /></p>
+<p>ゲームの開始時にカードが7枚配られますので、その中から1枚選んでフラッグの前においてください。カードを置いた後、山札が残っていれば、山札からカードを1枚補充します。これでターンは終了。相手プレイヤーのターンになり、相手プレイヤーが手札からカードを1枚フラッグの前において、山札からカードを1枚補充します。</p>
+<p><img src="./images/put-a-card.jpg" alt="カードを置く" /></p>
+<p>フラッグの前にカードが3枚揃うと、役の成立です。役は「ストレート・フラッシュ」と「スリーカード」、「フラッシュ」、「ストレート」、「ブタ」の5種で、役の強さはこの順序の通りです（「ストレート・フラッシュ」が最も強く、「ブタ」が最も弱い）。</p>
+<p><img src="./images/rank.jpg" alt="役" /></p>
+<p>より強い役を成立させたプレイヤーがフラッグを獲得できます。役が同じ場合はカードの数字の合計値が大きい方、それも同じ場合は役を先に作ったプレイヤーがフラッグを獲得します。また、自分のターンの終了時に、自分の役が成立しているフラッグは、相手の役が未成立であっても、相手がフラッグを獲得できないことを場札から証明できれば（システムが自動で判断して）フラッグ獲得となります。</p>
+<p><img src="./images/getting-flags.jpg" alt="フラッグの獲得" /></p>
+<p>このフラッグを、合計で5つ、もしくは、連続した3つを先に獲得したプレイヤーの勝ちです。</p>
+<p><img src="./images/win-1.jpg" alt="勝利条件" /> <img
+src="./images/win-2.jpg" alt="勝利条件" /></p>
+<p><a
+href="./front-line/dist/index.html">課題確認</a>で実際にプレイしていただくと、ルールを理解しやすいと思います。ぜひプレイしてみてください。</p>
+<h2
+id="作成していただくプログラムの仕様">作成していただくプログラムの仕様</h2>
+<p>プログラムは、手札や場の状態を標準入力から受信し、どのような行動をするかを標準出力に送信してください。フォーマットはJSONで、1つのデータを1行で表現します。</p>
+<p>通信には、ゲーム開始時、ターンが回ってきたとき（カードを出せない場に時は、ターンが飛ばされます）、ゲーム終了時の3種類があります。</p>
+<h3 id="ゲーム開始時">ゲーム開始時</h3>
+<p>入力として<code>{"command":"initialize"}</code>が渡ってきます。プログラムの初期化処理が完了したら、JSON形式のデータを何か（<code>"OK"</code>等）出力してください。</p>
+<h3 id="ターンが回ってきたとき">ターンが回ってきたとき</h3>
+<p>入力として、以下のUMLで表現する情報がJSONで渡ってきます。</p>
+<p><img src="./images/input.png" alt="入力" /></p>
+<p>出力は、以下のUMLで表現する情報をJSON形式で出力してください。</p>
+<p><img src="./images/output.png" alt="出力" /></p>
+<h3 id="ゲーム終了時">ゲーム終了時</h3>
+<p>入力として<code>{"command":"finalize"}</code>が渡ってきます。プログラムの終了処理が完了したら、JSON形式のデータを何か（<code>"OK"</code>等）出力してください。</p>
+<h3 id="注意点">注意点</h3>
+<ul>
+<li>乱数シードが同じであれば同じカードが配られることを利用するアルゴリズム（最初に配られたカードから乱数シードを推測し、敵の手札や山札を予測する等）は禁止とします。</li>
+<li>不正なJSONを送付したときは、そのゲームは負けとなります。</li>
+<li>ターンが回ってきたときにルールで許されていない手を出力したときは、そのゲームは負けとなります。</li>
+<li>対戦環境は、OSがWindows 11 Professional 64bit、CPUがIntel Core
+i7-1165G7、メモリが32GBです。自分のプログラムに加えて敵のプログラムも実行しますので、メモリを使用しすぎないようにしてください。</li>
+<li>ゲーム開始時とゲーム終了時の処理は概ね30秒以内、ターンが回ってきた時の処理は概ね10秒以内に完了させてください。</li>
+<li>ログ出力は、標準エラー出力を使用してください。</li>
+<li>プログラムを作成する際は、<a
+href="./python-example.zip">サンプル</a>や<a
+href="./front-line.zip">課題確認（ソース・コード）</a>のsrc/cli/adapter.jsとsrc/players/operation*.jsを参考にしてみてください。</li>
+</ul>
+<h2 id="対戦環境">対戦環境</h2>
+<p>対戦環境は、<a
+href="./front-line.zip">課題確認（ソース・コード）</a>で提供しています。使用したプログラミング言語はJavaScriptで、<a
+href="https://nodejs.org/ja">node.js</a>上で動作します。</p>
+<p><a href="https://nodejs.org/ja">node.js</a>をインストール（18.16.0
+LTSで動作検証しています）し、<a
+href="./front-line.zip">課題確認（ソース・コード）</a>を適当なフォルダに展開し、コマンドプロンプト上でそのフォルダに移動し、<code>npm install</code>してください。</p>
+<h3
+id="コマンドライン上でのai同士の対戦">コマンドライン上でのAI同士の対戦</h3>
+<p>AI同士を対戦させる場合は、コマンドプロンプトで<code>npm --silent run play "先攻プレイヤーを起動するコマンド" "後攻プレイヤーを起動するコマンド" 乱数シード</code>を実行してください。乱数シードを0にした場合は、対戦環境がランダムにシードを選択します。</p>
+<p><img src="./images/npm-run-play-1.png" alt="AI対戦の起動" /></p>
+<p><img src="./images/npm-run-play-2.png" alt="AI対戦の結果" /></p>
+<p>ゲームの途中経過やAIのログは標準エラー出力に、ゲームの結果は標準出力に出力されます。標準出力に出力されるゲームの結果は、先攻が勝った場合は「0」、後攻が勝った場合は「1」です。</p>
+<h3
+id="webブラウザ上でのaiと人の対戦">Webブラウザ上でのAIと人の対戦</h3>
+<p>作成したAIとWebブラウザ上で対戦することもできます。準備として、コマンドプロンプトを2つ開いて、1つ目のコマンドプロンプトで<code>npm run dev</code>し、2つ目のコマンドプロンプトで<code>npm run webSocke "AIを起動するコマンド"</code>を実行してください。</p>
+<p><img src="./images/npm-run-dev.png" alt="npm run dev" /></p>
+<p><img src="./images/npm-run-webSocket.png"
+alt="npm run webSocket" /></p>
+<p>以上を実行したら、<code>npm run dev</code>したコマンドプロンプトに表示されたURLをWebブラウザで開き、[敵]セレクトボックスを「WebSocket」に設定し、[New
+Game]ボタンをクリックしてください。</p>
+<p><img src="./images/play-with-ai.png" alt="作成したAIと対戦" /></p>
+<h2 id="コンクールの進行">コンクールの進行</h2>
+<p>練習試合と公式試合を、それぞれ1回実施します。</p>
+<p>練習試合の形式は、乱数シードを固定しての、先攻と後攻を入れ替えての2対戦を単位にした総当り戦です。これを72時間で繰り返せるだけ繰り返して、勝利数で順位をつけます。</p>
+<p>公式試合では、予選として練習試合と同形式の試合を実施し、上位4名を決定します。この4名での総当たり戦の決勝を24時間実施し、順位を決定します。決勝で同着が発生した場合は直接対戦での勝利数が多い方、勝利数が同じ場合は追加で先攻と後攻を入れ替えての対戦を実施して勝利数が多い方を、それも同じ場合は、処理時間が短かった方を上位とします。</p>
+<h2 id="コミュニケーション">コミュニケーション</h2>
+<p>プログラミング・コンクールの目的は「NULグループにおける開発力の向上および、参加者どうしの相互啓発を図る」です。</p>
+<p>課題のポイントを理解し、ポイントに沿う形で自身の作品の優秀さを主張してください。プログラミング・コンクールに参加する人と作品に敬意を払い、理解しあい、互いの優秀なスキルを共有してください。</p>
+<p>参加者全員が「相互啓発を図る」ために、課題についての質問や意見は参加者全員で対応することとします。参加者は以下の事項を守ってください。</p>
+<ol type="1">
+<li>課題についての質問は、後述するTeamsに投稿/回答してください。</li>
+<li>質問や回答に意見のある場合も、Teamsを使用してください。個人宛ての質問や意見は不可とします。</li>
+</ol>
+<h2 id="teams">Teams</h2>
+<p>コミュニケーション媒体としてTeamsに「プロコン参加者サイト」チームを用意しますので、ご活用ください。「◯◯技術についてオブザーバーが解説しろ」とかの投稿でも大丈夫です。ただ、オブザーバーの能力不足で解説できない場合は、申し訳有りません、相互啓発ということで参加者の皆様のご協力をお願いするかもしれませんが。</p>
+<ol type="1">
+<li>事務局が、参加者とオブザーバーをメンバー登録します。メンバーは、課題1と課題2のどちらのチャンネルにも参加することができます。</li>
+<li>各課題の質問や連絡は各課題のチャンネルに投稿してください。</li>
+<li>投稿するとき、「@」を付けてメンションするとメンバーに通知することができます。「@q1」は課題1のメンバー全員に、「@q2」は課題2のメンバー全員にメンションが届きます。</li>
+<li>過去の投稿は遡って確認できます。途中から参加した方は、過去の投稿も確認するようにしてください。</li>
+</ol>
+</article>
+</body>
+</html>
