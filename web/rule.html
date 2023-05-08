@@ -71,7 +71,7 @@ id="作成していただくプログラムの仕様">作成していただく�
 <h3 id="ゲーム開始時">ゲーム開始時</h3>
 <p>入力として<code>{"command":"initialize"}</code>が渡ってきます。プログラムの初期化処理が完了したら、JSON形式のデータを何か（<code>"OK"</code>等）出力してください。</p>
 <h3 id="ターンが回ってきたとき">ターンが回ってきたとき</h3>
-<p>入力として、以下のUMLで表現する情報がJSONで渡ってきます。</p>
+<p>入力として、以下のUMLのクラス図で表現する情報がJSONで渡ってきます。</p>
 <p><img src="./images/input.png" alt="入力" /></p>
 <p>出力は、以下のUMLで表現する情報をJSON形式で出力してください。</p>
 <p><img src="./images/output.png" alt="出力" /></p>
@@ -106,7 +106,7 @@ id="コマンドライン上でのai同士の対戦">コマンドライン上で
 <p>ゲームの途中経過やAIのログは標準エラー出力に、ゲームの結果は標準出力に出力されます。標準出力に出力されるゲームの結果は、先攻が勝った場合は「0」、後攻が勝った場合は「1」です。</p>
 <h3
 id="webブラウザ上でのaiと人の対戦">Webブラウザ上でのAIと人の対戦</h3>
-<p>作成したAIとWebブラウザ上で対戦することもできます。準備として、コマンドプロンプトを2つ開いて、1つ目のコマンドプロンプトで<code>npm run dev</code>し、2つ目のコマンドプロンプトで<code>npm run webSocke "AIを起動するコマンド"</code>を実行してください。</p>
+<p>作成したAIとWebブラウザ上で対戦することもできます。準備として、コマンドプロンプトを2つ開いて、1つ目のコマンドプロンプトで<code>npm run dev</code>し、2つ目のコマンドプロンプトで<code>npm run webSocket "AIを起動するコマンド"</code>を実行してください。</p>
 <p><img src="./images/npm-run-dev.png" alt="npm run dev" /></p>
 <p><img src="./images/npm-run-webSocket.png"
 alt="npm run webSocket" /></p>
