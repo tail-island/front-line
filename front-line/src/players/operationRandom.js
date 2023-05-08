@@ -10,7 +10,7 @@ function * getLegalActions (layout, hand, flags) { // function *なので、ジ�
     // 旗の数だけループします。
     for (const [to, flag] of flags.entries()) {
       // 旗が誰のものでもなくて、場に3枚までしか出ていない場合にのみ、カードを出せます。
-      if (flag.owner < 0 && layout[to].length < 3) {
+      if (flag.owner == null && layout[to].length < 3) {
         // from番目の手札をto番目の旗に出す手を返します。
         yield { from, to } // ジェネレーターなので、yieldできます。
       }
