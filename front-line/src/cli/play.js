@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-// import { createWriteStream } from 'fs'
+import { createWriteStream } from 'fs'
 import { createInterface } from 'readline'
 import { Game } from '../models/game.js'
 
@@ -18,6 +18,17 @@ function printState (state) {
   console.error()
   console.error(state.hands[1].map(card => `${card.color}-${card.number}`).join('\t'))
   console.error('-------------------------------------------------------------------')
+}
+
+function withTimeout (promise, msec) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => {
+      setTimeout(() => {
+        reject(new Error('timeout...'))
+      }, msec)
+    })
+  ])
 }
 
 function initialize (player) {
@@ -55,9 +66,9 @@ const players = process.argv.slice(2, 4).map((command, i) => {
 
   result.stdout = createInterface(result.stdout)
 
-  // const stream = createWriteStream(`player-${i}.log`)
-  // createInterface(result.stderr).on('line', line => { stream.write(`${line}\n`) })
-  createInterface(result.stderr).on('line', console.error)
+  const stream = createWriteStream(`player-${i}.log`)
+  createInterface(result.stderr).on('line', line => { stream.write(`${line}\n`) })
+  // createInterface(result.stderr).on('line', console.error)
 
   return result
 })
@@ -76,27 +87,34 @@ while (state.winner == null) {
   const self = state.turn
   const other = (self + 1) % 2
 
-  const action = await getAction(
-    players[self],
-    {
-      layout: state.layouts[self],
-      otherLayout: state.layouts[other],
-      flags: state.flags,
-      hand: state.hands[self],
-      otherHandLength: state.hands[other].length,
-      stockLength: state.stock.length,
-      playFirst: self === 0
-    }
-  )
+  try {
+    const action = await withTimeout(getAction(
+      players[self],
+      {
+        layout: state.layouts[self],
+        otherLayout: state.layouts[other],
+        flags: state.flags,
+        hand: state.hands[self],
+        otherHandLength: state.hands[other].length,
+        stockLength: state.stock.length,
+        playFirst: self === 0
+      }
+    ), 20_000)
 
-  if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
-    console.error('illegal action...')
+    if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
+      console.error('illegal action...')
+      state.winner = other
+      break
+    }
+
+    state = game.getNextState(state, action)
+    printState(state)
+  } catch (error) {
+    console.error(error.message)
     state.winner = other
+
     break
   }
-
-  state = game.getNextState(state, action)
-  printState(state)
 }
 
 console.error(`Player ${state.winner} win!`)
