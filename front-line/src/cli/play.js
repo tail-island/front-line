@@ -1,3 +1,4 @@
+import Timeout from 'await-timeout'
 import { spawn } from 'child_process'
 import { createWriteStream } from 'fs'
 import { createInterface } from 'readline'
@@ -18,17 +19,6 @@ function printState (state) {
   console.error()
   console.error(state.hands[1].map(card => `${card.color}-${card.number}`).join('\t'))
   console.error('-------------------------------------------------------------------')
-}
-
-function withTimeout (promise, msec) {
-  return Promise.race([
-    promise,
-    new Promise((_, reject) => {
-      setTimeout(() => {
-        reject(new Error('timeout...'))
-      }, msec)
-    })
-  ])
 }
 
 function initialize (player) {
@@ -88,7 +78,7 @@ while (state.winner == null) {
   const other = (self + 1) % 2
 
   try {
-    const action = await withTimeout(getAction(
+    const action = await Timeout.wrap(getAction(
       players[self],
       {
         layout: state.layouts[self],
@@ -99,7 +89,7 @@ while (state.winner == null) {
         stockLength: state.stock.length,
         playFirst: self === 0
       }
-    ), 20_000)
+    ), 20_000, 'timeout...')
 
     if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
       console.error('illegal action...')
