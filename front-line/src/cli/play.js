@@ -91,6 +91,8 @@ while (state.winner == null) {
       }
     ), 20_000, 'timeout...')
 
+    console.error(action)
+
     if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
       console.error('illegal action...')
       state.winner = other
