@@ -169,8 +169,8 @@ export class Game {
 
       const winner = cond(
         [
-          [either(isContinuousThreeOwner(0), isFiveOwner(0)), always(0)],
-          [either(isContinuousThreeOwner(1), isFiveOwner(1)), always(1)],
+          [either(isContinuousThreeOwner((state.turn + 0) % 2), isFiveOwner((state.turn + 0) % 2)), always((state.turn + 0) % 2)],
+          [either(isContinuousThreeOwner((state.turn + 1) % 2), isFiveOwner((state.turn + 1) % 2)), always((state.turn + 1) % 2)],
           [T, always(null)]
         ]
       )(map(prop('owner'), state.flags))

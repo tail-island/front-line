@@ -1,5 +1,5 @@
 import Timeout from 'await-timeout'
-import { spawn } from 'child_process'
+import { exec, spawn } from 'child_process'
 import { createWriteStream } from 'fs'
 import { createInterface } from 'readline'
 import { Game } from '../models/game.js'
@@ -34,7 +34,7 @@ function initialize (player) {
 function getAction (player, state) {
   return new Promise(resolve => {
     player.stdout.once('line', line => {
-      resolve(JSON.parse(line))
+      resolve(line)
     })
 
     player.stdin.write(`${JSON.stringify({ command: 'getAction', state })}\n`)
@@ -63,6 +63,8 @@ const players = process.argv.slice(2, 4).map((command, i) => {
   return result
 })
 
+const executionTimes = [0, 0]
+
 const seed = process.argv[4] != null ? parseInt(process.argv[4]) : 0
 const game = new Game()
 
@@ -78,20 +80,27 @@ while (state.winner == null) {
   const other = (self + 1) % 2
 
   try {
-    const action = await Timeout.wrap(getAction(
-      players[self],
-      {
-        layout: state.layouts[self],
-        otherLayout: state.layouts[other],
-        flags: state.flags,
-        hand: state.hands[self],
-        otherHandLength: state.hands[other].length,
-        stockLength: state.stock.length,
-        playFirst: self === 0
-      }
-    ), 20_000, 'timeout...')
+    const startingTime = performance.now()
+    const actionString = await Timeout.wrap(
+      getAction(
+        players[self],
+        {
+          layout: state.layouts[self],
+          otherLayout: state.layouts[other],
+          flags: state.flags,
+          hand: state.hands[self],
+          otherHandLength: state.hands[other].length,
+          stockLength: state.stock.length,
+          playFirst: self === 0
+        }
+      ),
+      15_000,
+      'timeout...')
+    executionTimes[self] += performance.now() - startingTime
 
-    console.error(action)
+    console.error(actionString)
+
+    const action = JSON.parse(actionString)
 
     if (!game.getLegalActions(state).find(legalAction => legalAction.from === action.from && legalAction.to === action.to)) {
       console.error('illegal action...')
@@ -104,15 +113,20 @@ while (state.winner == null) {
   } catch (error) {
     console.error(error.message)
     state.winner = other
-
     break
   }
 }
 
 console.error(`Player ${state.winner} win!`)
-console.log(state.winner)
+console.log(`${state.winner}\t${executionTimes[0]}\t${executionTimes[1]}`)
 
 for (const player of players) {
-  await finalize(player)
-  player.stdin.end()
+  try {
+    await Timeout.wrap(finalize(player), 30_000, 'timeout...')
+  } catch (error) {
+    console.error(error.message)
+  }
+
+  // 念のため。
+  exec(`taskkill /f /t /pid ${player.pid}`)
 }
